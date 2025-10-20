@@ -17,7 +17,7 @@ export const SearchBar = ({ placeHolder , onQuery }:Props) => {
 
     const timeOutId = setTimeout(()=> {
       onQuery(query);
-    },700)
+    },2000)
 
     return () => {
       clearTimeout(timeOutId);
@@ -25,8 +25,10 @@ export const SearchBar = ({ placeHolder , onQuery }:Props) => {
     
   },[query , onQuery])
 
+  
   const handleSearch = () => {
     onQuery(query);
+    setQuery('');
   }
 
   const handleKeyDown = (event:KeyboardEvent<HTMLInputElement>) => {

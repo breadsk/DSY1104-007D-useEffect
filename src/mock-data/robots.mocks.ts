@@ -1,14 +1,5 @@
 
-export interface robotsProps {
-    series:number;
-    id:number;
-    name:string;
-    weapon:string;
-    avatar:string;
-    sprite1:string;
-    weakness:string;
-    stageImg:string;
-}
+import type { robotsProps } from '../interfaces/images.interfaces'
 
 
 export const robots:robotsProps[] = [
