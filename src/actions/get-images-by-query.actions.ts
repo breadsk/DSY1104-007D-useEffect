@@ -1,14 +1,18 @@
-import axios from 'axios'
-
 import type { responseProps } from '../interfaces/images.interfaces';
 
-export const getImagesByQuery = async( query:string ):Promise<responseProps> => {
+export const getImagesByQuery = async(query:string):Promise<responseProps> => {
 
-    console.log(query);
-    const encodedName = encodeURIComponent(query).replace(/%20/g,'+')
-    const response = await axios.get<responseProps>(`https://repaso-node.onrender.com/name/${encodedName}`);
+    const encodedName = encodeURIComponent(query).replace(/20%/g,'+');
 
-    console.log(response.data);
-    return response.data;
+    const response = await fetch(`https://repaso-node.onrender.com/name/${encodedName}`);
+
+    if(!response.ok){
+        throw new Error(`Error HTTP: ${response.status}`);
+    }
+
+    const data:responseProps = await response.json();
+
+    console.log(data);
+
+    return data;
 }
-

@@ -11,6 +11,7 @@ export interface robotsProps {
 
 export interface responseProps{
     ok: boolean;
-    statusCode: number;
-    robot:robotsProps 
+    statusCode:number;
+    robots: robotsProps[];
+        
 }

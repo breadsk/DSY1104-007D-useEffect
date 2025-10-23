@@ -1,4 +1,4 @@
-import type { robotsProps } from '../mock-data/robots.mocks'
+import type { robotsProps } from '../interfaces/images.interfaces'
 
 interface Props {
     robots:robotsProps[]
@@ -6,6 +6,9 @@ interface Props {
 
 
 export const ImagesList = ({ robots }:Props) => {
+
+    console.log(robots);
+
   return (
     <div className="gifs-container">
         {
