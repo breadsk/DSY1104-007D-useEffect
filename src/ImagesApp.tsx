@@ -3,18 +3,17 @@ import { useEffect, useState } from 'react'
 import { CustomHeader , SearchBar } from './sharedComponents'
 import { PreviousSearches , ImagesList } from './imagesComponents'
 
-import { getImagesByQuery } from './actions/get-images-by-query.actions'
-
-import './index.css'
-import { getImages } from './actions/get-images.actions'
+import { getImages , getImagesByQuery } from './actions';
 
 import type { robotsProps } from './interfaces/images.interfaces'
 
+import './index.css'
 
 export const ImagesApp = () => {
 
-  const [ images , setImages ] = useState<robotsProps[]>([]);
-  const [ previousRobot , setPreviousRobot ]  = useState(['']);
+  const [ robots , setRobots ] = useState<robotsProps[]>([]);
+  const [ allRobots , setAllRobots ] = useState<robotsProps[]>([]);
+  const [ previousRobot , setPreviousRobot ]  = useState<string[]>([]);
 
   getImages();
   useEffect(()=> {
@@ -22,7 +21,8 @@ export const ImagesApp = () => {
       try {
          const data = await getImages();
          const robots = data.robots;
-         setImages(robots);
+         setRobots(robots);
+         setAllRobots(robots);
        }
        catch(error){
         console.error("Error en fetchin data", error);
@@ -41,18 +41,35 @@ export const ImagesApp = () => {
    
     query = query.trim().toLowerCase();
 
-    //2 Si la query viene vacia cortamos la funcion
-    if(query.length === 0) return;
-        
-    if(previousRobot.includes(query)) return;
-
-
-    setPreviousRobot([query, ...previousRobot].splice(0,7))
     
-    console.log(query);
+    if(query.length === 0){
+      setRobots(allRobots);
+      return;
+    }
+      
+    setPreviousRobot(( prevSearches ) => {
+      if(prevSearches[0] === query) return prevSearches;
 
-    const data = await getImagesByQuery(query)
-    console.log(data);
+      const filteredSearches = prevSearches.filter(( termino ) => {
+        return termino.toLocaleLowerCase() !== query;
+      });
+
+      const updateSearches = [query, ...filteredSearches].slice(0,7);
+
+      return updateSearches;
+    })
+
+    try {
+
+      const searchRobotResult = await getImagesByQuery(query);
+      if(searchRobotResult.robot){
+        setRobots([searchRobotResult.robot]);
+      }
+      return;
+
+    }catch(error){
+      setRobots(allRobots);
+    }
     
   }
 
@@ -73,7 +90,7 @@ export const ImagesApp = () => {
             onLabelClicked = { handleTermClicked }
             />
         
-        <ImagesList robots={ images } />
+        <ImagesList robots={ robots } />
         
         
     </>

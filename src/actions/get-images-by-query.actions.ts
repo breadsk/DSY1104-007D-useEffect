@@ -1,6 +1,6 @@
-import type { responseProps } from '../interfaces/images.interfaces';
+import type { responseNameProps } from '../interfaces/images.interfaces';
 
-export const getImagesByQuery = async(query:string):Promise<responseProps> => {
+export const getImagesByQuery = async(query:string):Promise<responseNameProps> => {
 
     const encodedName = encodeURIComponent(query).replace(/20%/g,'+');
 
@@ -10,7 +10,7 @@ export const getImagesByQuery = async(query:string):Promise<responseProps> => {
         throw new Error(`Error HTTP: ${response.status}`);
     }
 
-    const data:responseProps = await response.json();
+    const data:responseNameProps = await response.json();
 
     console.log(data);
 
