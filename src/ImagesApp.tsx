@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react'
+import { 
+    useCallback,
+    useEffect, 
+    useState } from 'react'
 
 import { CustomHeader , SearchBar } from './sharedComponents'
 import { PreviousSearches , ImagesList } from './imagesComponents'
@@ -15,7 +18,7 @@ export const ImagesApp = () => {
   const [ allRobots , setAllRobots ] = useState<robotsProps[]>([]);
   const [ previousRobot , setPreviousRobot ]  = useState<string[]>([]);
 
-  getImages();
+  
   useEffect(()=> {
     const fetchData = async() => {
       try {
@@ -37,10 +40,9 @@ export const ImagesApp = () => {
     console.log({term});    
   }
   
-  const handleSearch = async( query:string ) => {
+  const handleSearch = useCallback(async( query:string ) => {
    
     query = query.trim().toLowerCase();
-
     
     if(query.length === 0){
       setRobots(allRobots);
@@ -53,7 +55,6 @@ export const ImagesApp = () => {
       const filteredSearches = prevSearches.filter(( termino ) => {
         return termino.toLocaleLowerCase() !== query;
       });
-
       const updateSearches = [query, ...filteredSearches].slice(0,7);
 
       return updateSearches;
@@ -71,7 +72,7 @@ export const ImagesApp = () => {
       setRobots(allRobots);
     }
     
-  }
+  },[allRobots])
 
   return (
     <>        
