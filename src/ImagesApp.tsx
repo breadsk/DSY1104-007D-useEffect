@@ -8,6 +8,8 @@ import { PreviousSearches , ImagesList } from './imagesComponents'
 
 import { getImages , getImagesByQuery } from './actions';
 
+import { updateArray } from './helpers'
+
 import type { robotsProps } from './interfaces/images.interfaces'
 
 import './index.css'
@@ -49,16 +51,7 @@ export const ImagesApp = () => {
       return;
     }
       
-    setPreviousRobot(( prevSearches ) => {
-      if(prevSearches[0] === query) return prevSearches;
-
-      const filteredSearches = prevSearches.filter(( termino ) => {
-        return termino.toLocaleLowerCase() !== query;
-      });
-      const updateSearches = [query, ...filteredSearches].slice(0,7);
-
-      return updateSearches;
-    })
+    setPreviousRobot(( prev ) => updateArray(prev,query))
 
     try {
 
@@ -72,7 +65,7 @@ export const ImagesApp = () => {
       setRobots(allRobots);
     }
     
-  },[allRobots])
+  },[ allRobots ]);
 
   return (
     <>        
@@ -97,3 +90,12 @@ export const ImagesApp = () => {
     </>
   )
 }
+
+// El Problema
+// Cada vez que tu componente ImagesApp se re-renderiza, se crea una nueva instancia de la función handleSearch. Esto pasa porque:
+
+//1. Cambios de estado: Cuando setRobots, setAllRobots o setPreviousRobot se ejecutan, el componente se re-renderiza
+
+//2. Nueva función: En cada re-render, handleSearch se recrea como una función completamente nueva
+
+//3. Prop drilling: Si pasas handleSearch a componentes hijos, ellos detectan el cambio y también se re-renderizan

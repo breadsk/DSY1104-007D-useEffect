@@ -12,5 +12,7 @@ export const getImagesByQuery = async(query:string):Promise<responseNameProps> =
 
     const data:responseNameProps = await response.json();
 
+    console.log(data);
+
     return data;
 }
